@@ -1,7 +1,7 @@
 '''
 Author: GoogTech
 Date: 2020-12-20 11:08:38
-LastEditTime: 2020-12-20 16:43:59
+LastEditTime: 2020-12-20 17:17:24
 Description: Get Today Weather INFO Then Ouput Voice Prompt And Send It To Your WeChat
 Version: v0.0.2
 '''
@@ -73,13 +73,17 @@ def Show_weather(weather_data):
 
 # 百度语音播报今天天气状况
 def Voice_broadcast(weather_forcast_txt):
-    weather_forecast_txt = weather_forcast_txt
-    client = AipSpeech(APP_ID, API_KEY, SECRET_KEY)
+    weather_info = weather_forcast_txt
+    # 将天气信息推送到微信
+    if SendToWeChat(weather_forcast_txt):
+        weather_info = weather_info + \
+        '最后, 以上天气预报内容已通过「Server 酱」推送到了你的微信~'
+    else:
+        weather_info = weather_info + \
+        '注意: 以上天气预报内容无法通过「Server 酱」推送到你的微信!'
     # 百度语音合成, 参数配置详见: https://ai.baidu.com/ai-doc/SPEECH/Qk38y8lrl
-    result = client.synthesis(weather_forecast_txt, 'zh', 1, {
-        'vol': 5,
-        'per': 0
-    })
+    client = AipSpeech(APP_ID, API_KEY, SECRET_KEY)
+    result = client.synthesis(weather_info, 'zh', 1, {'vol': 5, 'per': 0})
     if not isinstance(result, dict):
         with open(BAIDU_TTS_MP3, 'wb') as f:
             f.write(result)
@@ -95,10 +99,8 @@ def SendToWeChat(weather_forecast_txt):
     content = weather_forecast_txt
     data = {"text": title, "desp": content}
     # 发送( 同样内容的消息一分钟只能发送一次, 服务器只保留一周的消息记录 )
-    if requests.post(SERVER_API, data=data).status_code == 200:
-        print("天气预报内容已通过「Server 酱」推送到了你的微信~")
-    else:
-        print("「Server 酱」推送消息失败 !")
+    return True if requests.post(SERVER_API,
+                                 data=data).status_code == 200 else False
 
 
 # 主函数
@@ -106,4 +108,3 @@ if __name__ == '__main__':
     weather_data = Get_weather_data()
     weather_forecast_txt = Show_weather(weather_data)
     Voice_broadcast(weather_forecast_txt)
-    SendToWeChat(weather_forecast_txt)
