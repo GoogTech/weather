@@ -1,15 +1,16 @@
 '''
 Author: GoogTech
 Date: 2020-12-20 11:08:38
-LastEditTime: 2020-12-20 14:48:53
-Description: Get Today Weather INFO And Ouput Voice Prompt
-Version: v0.0.1
+LastEditTime: 2020-12-20 16:43:59
+Description: Get Today Weather INFO Then Ouput Voice Prompt And Send It To Your WeChat
+Version: v0.0.2
 '''
 
 import urllib.parse
 import urllib.request
 import gzip
 import json
+import requests
 import playsound
 from aip import AipSpeech
 import re
@@ -83,9 +84,21 @@ def Voice_broadcast(weather_forcast_txt):
         with open(BAIDU_TTS_MP3, 'wb') as f:
             f.write(result)
         f.close()
-        print('tts successfully')
     # 使用 playsound 模块播放语音
     playsound.playsound(BAIDU_TTS_MP3)
+
+
+# 将获取的天气信息推送到微信
+def SendToWeChat(weather_forecast_txt):
+    # text 为推送的 title, desp 为推送的 description
+    title = "今日天气预报来咯~"
+    content = weather_forecast_txt
+    data = {"text": title, "desp": content}
+    # 发送( 同样内容的消息一分钟只能发送一次, 服务器只保留一周的消息记录 )
+    if requests.post(SERVER_API, data=data).status_code == 200:
+        print("天气预报内容已通过「Server 酱」推送到了你的微信~")
+    else:
+        print("「Server 酱」推送消息失败 !")
 
 
 # 主函数
@@ -93,3 +106,4 @@ if __name__ == '__main__':
     weather_data = Get_weather_data()
     weather_forecast_txt = Show_weather(weather_data)
     Voice_broadcast(weather_forecast_txt)
+    SendToWeChat(weather_forecast_txt)
