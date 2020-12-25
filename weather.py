@@ -1,9 +1,9 @@
 '''
 Author: GoogTech
 Date: 2020-12-20 11:08:38
-LastEditTime: 2020-12-24 20:16:49
+LastEditTime: 2020-12-25 19:01:11
 Description: Get Today Weather INFO Then Ouput Voice Prompt And Send It To Your WeChat
-Version: v0.0.2
+Version: v0.0.3
 '''
 
 import os
@@ -12,7 +12,8 @@ import urllib.request
 import gzip
 import json
 import requests
-import playsound
+# import playsound
+import subprocess
 from aip import AipSpeech
 import re
 from config import *
@@ -128,10 +129,11 @@ def Voice_broadcast(weather_forcast_txt):
             f.write(result)
         f.close()
     # 使用 playsound 模块播放语音
-    playsound.playsound(BAIDU_TTS_MP3)
+    # playsound.playsound(BAIDU_TTS_MP3)
     # 删除 BAIDU_TTS_MP3 文件, 防止 PermissionError: [Errno 13] Permission denied: '.tts.mp3'
     # refer to: https://www.it1352.com/1641930.html
-    os.remove(BAIDU_TTS_MP3)
+    # os.remove(BAIDU_TTS_MP3)
+    subprocess.getoutput('mplayer .tts.mp3')
 
 
 # 将获取的天气信息推送到微信
@@ -162,18 +164,18 @@ def run_tomorrow():
 # 主函数
 if __name__ == '__main__':
     scheduler = BlockingScheduler()
-    # scheduler.add_job(run, 'interval', seconds = 90, id = 'job-one') # 每 90 秒执行一次,用于测试
-    # scheduler.add_job(run, 'cron', hour='08-22', minute='10', second = '00', id = 'job-one')  # 每天 08:10:00 和 22:10:00 点分别执行一次
+    # scheduler.add_job(run_today, 'interval', seconds = 90, id = 'job-one') # 每 90 秒执行一次,用于测试
+    # scheduler.add_job(run_today, 'cron', hour='02', minute='53', second = '00', id = 'job-test')  # 每天 08:10:00 和 22:10:00 点分别执行一次
     scheduler.add_job(run_today,
                       'cron',
                       hour='08',
-                      minute='10',
+                      minute='15',
                       second='00',
                       id='job-today')
     scheduler.add_job(run_tomorrow,
                       'cron',
                       hour='22',
-                      minute='10',
+                      minute='00',
                       second='00',
                       id='job-tomorrow')
     scheduler.start()
