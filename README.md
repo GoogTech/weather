@@ -1,28 +1,32 @@
 # Weather Voice Prompt
-Get Today Weather INFO Then Ouput Voice Prompt And Send It To Your WeChat
+🌈 Get The Weather INFO Then Ouput Voice Prompt And Send It To Your WeChat
 
 ## OS
-* `Windows 10`
+* `Raspberry Pi 4B 4GB`
 
 ## Env
-* `Python 3.7.3`
+* `Python 3.7`
 * `urllib`
-* `playsound`
+* `apscheduler`
 * `baidu-aip`
 * `Baidu AIP SDK( aip-python-sdk-2.2.15 )`
 
-## How To Run
+## How To Run On RasPi 4B
 you need to install the dependencies firstly
-> $ pip install playsound
+> $ pip3 install apscheduler
 
 > $ cd aip-python-sdk-2.2.15
 
-> $ pip install baidu-aip
+> $ pip3 install baidu-aip
 
-> $ python setup.py install
+> $ python3.7 setup.py install
 
 then run it
-> $ python weather.py
+> $ python3.7 weather.py
+
+## Bug fixed
+* [ImportError no module named 'xxx'. . .](https://stackoverflow.com/questions/62154632/importerror-no-module-named-playsound)
+* [ValueError: Namespace Gtk not available. . .](https://www.e-learn.cn/topic/3787817)
 
 ## Thanks
 * [ServerChan](http://sc.ftqq.com/3.version)
