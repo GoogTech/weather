@@ -1,5 +1,5 @@
 # Weather Voice Prompt
-Get Today Weather INFO Then Ouput Voice Prompt And Send It To Your WeChat
+🌈 Get Today Weather INFO Then Ouput Voice Prompt And Send It To Your WeChat
 
 ## OS
 * `Windows 10`
@@ -12,7 +12,7 @@ Get Today Weather INFO Then Ouput Voice Prompt And Send It To Your WeChat
 * `Baidu AIP SDK( aip-python-sdk-2.2.15 )`
 
 ## How To Run
-you need to install the dependencies firstly
+1. Firstly you need to install some dependencies.
 > $ pip install playsound
 
 > $ cd aip-python-sdk-2.2.15
@@ -21,7 +21,9 @@ you need to install the dependencies firstly
 
 > $ python setup.py install
 
-then run it
+2. Then open the `config.py` file and add your `Baidu API` and `ServerChan` configuration information into it.
+
+3. Finally run it.
 > $ python weather.py
 
 ## Thanks
